@@ -1,2 +1,2 @@
-# bmi2023lab
+# bmi2024lab
 BMI lab
