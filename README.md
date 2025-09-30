@@ -1,3 +1,3 @@
 # bmi2025lab
-BMI lab
+BMI lab activity
 
