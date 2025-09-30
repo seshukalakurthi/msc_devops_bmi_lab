@@ -27,8 +27,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      
+    - name: Run unit tests
+      run: dotnet test BMILabtestproject/BMILabtestproject.csproj --no-restore --collect "Code coverage" -l:trx
       
     - name: dotnet publish
       run: dotnet publish -c Release -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/bmi
