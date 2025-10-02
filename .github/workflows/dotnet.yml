@@ -13,7 +13,7 @@ env:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -27,10 +27,19 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
       
-    - name: dotnet publish
+    - name: Run unit tests
+      run: dotnet test BMILabtestproject/BMILabtestproject.csproj --no-restore --collect "Code coverage" -l:trx
+
+    - name: Publish Unit Test Results
+      uses: dorny/test-reporter@v1
+      with:
+        artifact: ''
+        name: MS Tests                  
+        path: '**.trx'
+        reporter: 'dotnet-trx'
+      
+    - name: publish
       run: dotnet publish -c Release -o ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/bmi
 
     - name: Upload artifact
@@ -39,7 +48,7 @@ jobs:
           name: .net-app
           path: ${{env.AZURE_WEBAPP_PACKAGE_PATH}}/bmi
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
     steps:
       - name: Download artifact from build job
